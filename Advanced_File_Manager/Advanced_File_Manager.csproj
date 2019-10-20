@@ -94,5 +94,14 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Disk.png" />
+    <Resource Include="Images\icons8-документ-144.png" />
+    <Resource Include="Images\icons8-открыть-папку-144.png" />
+    <Resource Include="Images\icons8-папка-144.png" />
+    <Resource Include="Images\icons8-файл-144.png" />
+    <Resource Include="Images\icons8-файл-изображения-144.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

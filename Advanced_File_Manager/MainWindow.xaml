@@ -5,8 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Advanced_File_Manager"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        Title="MainWindow" Height="650" Width="900" ResizeMode="NoResize">
+    <StackPanel Background="#FF141414">
+        <StackPanel Orientation="Horizontal">
+            
+        </StackPanel>
+        <TreeView x:Name="FolderView">
+            <TreeView.Resources>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    
+                </Style>
+            </TreeView.Resources>
+        </TreeView>   
+    </StackPanel>
 </Window>
