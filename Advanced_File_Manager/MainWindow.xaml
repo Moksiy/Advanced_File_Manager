@@ -24,13 +24,9 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
-        <Button HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Width="73" Height="22" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7">
-            <StackPanel>
-                <Image Source="Images/back.png"/>
-            </StackPanel>
-        </Button>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="109,15,0,0" VerticalAlignment="Top" Width="73" Height="22" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
-        <TextBox HorizontalAlignment="Left" Height="22" Margin="239,15,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="464" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="810,15,0,0" VerticalAlignment="Top" Width="65" Height="22" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
+        <Button Content="&lt;&lt;" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Width="73" Height="22" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
+        <Button Content="Диск" HorizontalAlignment="Left" Margin="109,15,0,0" VerticalAlignment="Top" Width="73" Height="22" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
+        <TextBox HorizontalAlignment="Left" Height="22" Margin="253,15,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="464" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
+        <Button Content="Открыть" HorizontalAlignment="Left" Margin="801,15,0,0" VerticalAlignment="Top" Width="74" Height="22" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
     </Grid>
 </Window>

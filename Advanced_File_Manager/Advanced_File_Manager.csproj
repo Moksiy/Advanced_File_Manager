@@ -94,14 +94,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\Back.png" />
+    <Resource Include="Images\ClosedFolder.png" />
+    <Resource Include="Images\Document.png" />
+    <Resource Include="Images\File.png" />
+    <Resource Include="Images\Image.png" />
+    <Resource Include="Images\OpenFolder.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Disk.png" />
-    <Resource Include="Images\icons8-документ-144.png" />
-    <Resource Include="Images\icons8-открыть-папку-144.png" />
-    <Resource Include="Images\icons8-папка-144.png" />
-    <Resource Include="Images\icons8-файл-144.png" />
-    <Resource Include="Images\icons8-файл-изображения-144.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
