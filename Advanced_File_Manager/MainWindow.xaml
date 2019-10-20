@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Advanced_File_Manager"
         Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="MainWindow" Height="650" Width="900" ResizeMode="NoResize">
+        Title="Advanced File Manager" Height="650" Width="900" ResizeMode="NoResize">
     <Grid Background="#FF141414">
         <TreeView x:Name="FolderView" Background="#FF282828" Foreground="#FFC7C7C7" Margin="10,53,10,20">
             <TreeView.Resources>
