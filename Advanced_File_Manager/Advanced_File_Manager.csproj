@@ -63,6 +63,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HeaderTolmageConverter.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -96,7 +97,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Back.png" />
-    <Resource Include="Images\ClosedFolder.png" />
     <Resource Include="Images\Document.png" />
     <Resource Include="Images\File.png" />
     <Resource Include="Images\Image.png" />
@@ -104,6 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Disk.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ClosedFolder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

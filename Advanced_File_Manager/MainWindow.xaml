@@ -15,7 +15,8 @@
                         <Setter.Value>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">
-                                    <Image Width="30" Margin="5" Source="Images/Disk.png"/>
+                                    <Image Width="30" Margin="5" Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
+                                     AncestorType={x:Type TreeViewItem}}, Path=Tag, Converter={x:Static local:HeaderTolmageConverter.Instance}}"/>
                                     <TextBlock VerticalAlignment="Center" Text="{Binding}" FontSize="15" Foreground="#FFC7C7C7"/>
                                 </StackPanel>
                             </DataTemplate>
