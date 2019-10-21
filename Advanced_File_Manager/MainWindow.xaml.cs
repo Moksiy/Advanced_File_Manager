@@ -43,17 +43,57 @@ namespace Advanced_File_Manager
             foreach (var drive in Directory.GetLogicalDrives())
             {
                 //Создание нового элемента для этого
-                var item = new TreeViewItem();
-
-                //Установка заголовка и пути
-                item.Header = drive;
-                item.Tag = drive;
+                var item = new TreeViewItem()
+                {
+                    //Установка имени
+                    Header = drive,
+                    //Установка полного пути
+                    Tag = drive
+                }; 
 
                 item.Items.Add(null);
+                item.Expanded += Folder_Expanded;
 
                 //Добавление элемента в tree-view
                 FolderView.Items.Add(item);
             }
+        }
+
+        private void Folder_Expanded(object sender, RoutedEventArgs e)
+        {
+            var item = (TreeViewItem)sender;
+            //Если в item содержатся некорректные данные
+            if (item.Items.Count != 1 || item.Items[0] != null)
+                return;
+
+            //Очистка
+            item.Items.Clear();
+
+            //Получаем полный путь к папке
+            var fullPath = (string)item.Tag;
+
+            //Список путей
+            var directories = new List<string>();
+
+
+            try
+            {
+                //Получаем полный путь к директории
+                var dirs= Directory.GetDirectories(fullPath);
+
+                //Если путь корректный, добавляем в список
+                if (dirs.Length > 0)
+                    directories.AddRange(dirs);
+            }
+            catch{}
+
+            //Для директории ищем вложенные файлы
+            directories.ForEach(directoryPath =>
+            {
+                var subItem = new TreeViewItem();
+
+
+            });
         }
         #endregion
     }
