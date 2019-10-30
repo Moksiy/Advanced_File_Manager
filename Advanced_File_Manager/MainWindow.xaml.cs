@@ -56,6 +56,24 @@ namespace Advanced_File_Manager
                 //Добавление элемента в tree-view
                 FolderView.Items.Add(item);
             }
+
+            foreach (var drive in Directory.GetLogicalDrives())
+            {
+                //Создание нового элемента для этого
+                var item = new TreeViewItem()
+                {
+                    //Установка имени
+                    Header = drive,
+                    //Установка полного пути
+                    Tag = drive
+                };
+
+                item.Items.Add(null);
+                item.Expanded += Folder_Expanded;
+
+                //Добавление элемента в tree-view
+                FolderView2.Items.Add(item);
+            }
         }
         #endregion
 
@@ -118,6 +136,106 @@ namespace Advanced_File_Manager
                 //Добавление элемента  
                 item.Items.Add(subItem);
             });
+
+
+            #endregion
+
+            #region Получение файлов
+
+            //Список путей
+            var files = new List<string>();
+
+
+            try
+            {
+                //Получаем полный путь к файлу
+                var fs = Directory.GetFiles(fullPath);
+
+                //Если путь корректный, добавляем в список
+                if (fs.Length > 0)
+                    files.AddRange(fs);
+            }
+            catch { }
+
+            //Для фаайла ищем вложенные файлы
+            files.ForEach(filePath =>
+            {
+                //Создание элемента файла
+                var subItem = new TreeViewItem()
+                {
+                    //Установка Header как имя файла
+                    Header = GetFileFolderName(filePath),
+                    //И tag как полный путь
+                    Tag = filePath
+                };
+
+                //Добавление элемента  
+                item.Items.Add(subItem);
+            });
+
+            #endregion
+        }
+
+        /// <summary>
+        /// Когда в директории есть подпапки, поиск вложенных файлов
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Folder_Expanded2(object sender, RoutedEventArgs e)
+        {
+            #region Инициализация проверок
+            var item = (TreeViewItem)sender;
+            //Если в item содержатся некорректные данные
+            if (item.Items.Count != 1 || item.Items[0] != null)
+                return;
+
+            //Очистка
+            item.Items.Clear();
+
+            //Получаем полный путь к папке
+            var fullPath = (string)item.Tag;
+
+            #endregion
+
+            #region Получение директорий
+            //Список путей
+            var directories = new List<string>();
+
+
+            try
+            {
+                //Получаем полный путь к директории
+                var dirs = Directory.GetDirectories(fullPath);
+
+                //Если путь корректный, добавляем в список
+                if (dirs.Length > 0)
+                    directories.AddRange(dirs);
+            }
+            catch { }
+
+            //Для директории ищем вложенные файлы
+            directories.ForEach(directoryPath =>
+            {
+                //Создание элемента папки
+                var subItem = new TreeViewItem()
+                {
+                    //Установка Header как имя папки
+                    Header = GetFileFolderName(directoryPath),
+                    //И tag как полный путь
+                    Tag = directoryPath
+                };
+
+                //Добавляем пустой элемент чтобы 
+                subItem.Items.Add(null);
+
+                //Добавляем для ручного "расширения" директории
+                subItem.Expanded += Folder_Expanded2;
+
+                //Добавление элемента  
+                item.Items.Add(subItem);
+            });
+
+
             #endregion
 
             #region Получение файлов
