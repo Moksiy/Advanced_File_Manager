@@ -41,8 +41,10 @@ namespace Advanced_File_Manager
             //Если имя пустое, то это диск
             if (string.IsNullOrEmpty(name))
                 image = "Images/Disk.png";
+            //Скрытая папка
             else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Hidden))
                 image = "Images/ClosedFolder.png";
+            //Директория
             else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Directory))
                 image = "Images/OpenFolder.png";   
             
