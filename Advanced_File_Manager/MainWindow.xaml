@@ -8,13 +8,35 @@
         mc:Ignorable="d"
         Title="Advanced File Manager" Height="650" Width="1200" ResizeMode="NoResize">
     <Grid Background="#FF141414">
-        <TreeView x:Name="FolderView" Background="#FF282828" Foreground="#FFC7C7C7" Margin="20,53,595,20">
+        <TreeView x:Name="FolderView" Background="#FF282828" Foreground="#FFC7C7C7" Margin="20,53,595,20"
+                  SelectedItemChanged="SolutionTree_SelectedItemChanged" KeyDown="openContextMenu">
             <TreeView.Resources>
-                <Style TargetType="{x:Type TreeViewItem}">
+                <ContextMenu x:Key ="File">
+                    <MenuItem Header="Открыть" Click="OpenFile"/>
+                    <MenuItem Header="Копировать" Click="CopyFile"/>
+                    <MenuItem Header="Вырезать" Click="CutFile"/>
+                    <MenuItem Header="Переменовать" Click="RenameFile"/>
+                    <MenuItem Header="Удалить" Click="RemoveFile"/>
+                </ContextMenu>
+                <ContextMenu x:Key="folderCopied">
+                    <MenuItem Header="Вставить" Click="PasteFile"/>
+                    <MenuItem Header="Копировать" Click="CopyFile"/>
+                    <MenuItem Header="Вырезать" Click="CutFile"/>
+                    <MenuItem Header="Переменовать" Click="RenameFile"/>
+                    <MenuItem Header="Удалить" Click="RemoveFile"/>
+                </ContextMenu>
+                <ContextMenu x:Key="folder">
+                    <MenuItem Header="Копировать" Click="CopyFile"/>
+                    <MenuItem Header="Вырезать" Click="CutFile"/>
+                    <MenuItem Header="Переменовать" Click="RenameFile"/>
+                    <MenuItem Header="Удалить" Click="RemoveFile"/>
+                    <MenuItem Header="Создать" Click="CreateDir"/>
+                </ContextMenu>
+                <Style TargetType="{x:Type TreeViewItem}" >
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
+                                <StackPanel Orientation="Horizontal" ContextMenu="{Binding}">
                                     <Image Width="20" Margin="3" Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
                                      AncestorType={x:Type TreeViewItem}}, Path=Tag, Converter={x:Static local:HeaderTolmageConverter.Instance}}"/>
                                     <TextBlock VerticalAlignment="Center" Text="{Binding}" FontSize="13" Foreground="#FFC7C7C7"/>
@@ -26,8 +48,30 @@
             </TreeView.Resources>
         </TreeView>
 
-        <TreeView x:Name="FolderView2" Background="#FF282828" Foreground="#FFC7C7C7" Margin="605,53,20,20">
+        <TreeView x:Name="FolderView2" Background="#FF282828" Foreground="#FFC7C7C7" Margin="605,53,20,20"
+                   SelectedItemChanged="SolutionTree_SelectedItemChanged" KeyDown="openContextMenu">
             <TreeView.Resources>
+                <ContextMenu x:Key ="File">
+                    <MenuItem Header="Открыть" Click="OpenFile"/>
+                    <MenuItem Header="Копировать" Click="CopyFile"/>
+                    <MenuItem Header="Вырезать" Click="CutFile"/>
+                    <MenuItem Header="Переменовать" Click="RenameFile"/>
+                    <MenuItem Header="Удалить" Click="RemoveFile"/>
+                </ContextMenu>
+                <ContextMenu x:Key="folderCopied">
+                    <MenuItem Header="Вставить" Click="PasteFile"/>
+                    <MenuItem Header="Копировать" Click="CopyFile"/>
+                    <MenuItem Header="Вырезать" Click="CutFile"/>
+                    <MenuItem Header="Переменовать" Click="RenameFile"/>
+                    <MenuItem Header="Удалить" Click="RemoveFile"/>
+                </ContextMenu>
+                <ContextMenu x:Key="folder">
+                    <MenuItem Header="Копировать" Click="CopyFile"/>
+                    <MenuItem Header="Вырезать" Click="CutFile"/>
+                    <MenuItem Header="Переменовать" Click="RenameFile"/>
+                    <MenuItem Header="Удалить" Click="RemoveFile"/>
+                    <MenuItem Header="Создать" Click="CreateDir"/>
+                </ContextMenu>
                 <Style TargetType="{x:Type TreeViewItem}">
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>
@@ -43,10 +87,5 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
-        
-        <Button Content="&lt;&lt;" HorizontalAlignment="Left" Margin="10,15,0,0" VerticalAlignment="Top" Width="73" Height="22" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
-        <Button Content="Диск" HorizontalAlignment="Left" Margin="109,15,0,0" VerticalAlignment="Top" Width="73" Height="22" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
-        <TextBox HorizontalAlignment="Left" Height="22" Margin="253,15,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="464" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
-        <Button Content="Открыть" HorizontalAlignment="Left" Margin="801,15,0,0" VerticalAlignment="Top" Width="74" Height="22" Background="#FF282828" BorderBrush="#FF868686" Foreground="#FFC7C7C7"/>
     </Grid>
 </Window>

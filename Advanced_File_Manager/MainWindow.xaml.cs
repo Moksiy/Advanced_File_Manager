@@ -15,6 +15,7 @@ using System.IO;
 
 namespace Advanced_File_Manager
 {
+
     /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
@@ -29,6 +30,7 @@ namespace Advanced_File_Manager
             InitializeComponent();
         }
         #endregion
+
 
         #region Запуск
         /// <summary>
@@ -48,7 +50,7 @@ namespace Advanced_File_Manager
                     Header = drive,
                     //Установка полного пути
                     Tag = drive
-                }; 
+                };
 
                 item.Items.Add(null);
                 item.Expanded += Folder_Expanded;
@@ -76,6 +78,7 @@ namespace Advanced_File_Manager
             }
         }
         #endregion
+
 
         #region Вложенность
         /// <summary>
@@ -107,13 +110,13 @@ namespace Advanced_File_Manager
             try
             {
                 //Получаем полный путь к директории
-                var dirs= Directory.GetDirectories(fullPath);
+                var dirs = Directory.GetDirectories(fullPath);
 
                 //Если путь корректный, добавляем в список
                 if (dirs.Length > 0)
                     directories.AddRange(dirs);
             }
-            catch{}
+            catch { }
 
             //Для директории ищем вложенные файлы
             directories.ForEach(directoryPath =>
@@ -286,7 +289,7 @@ namespace Advanced_File_Manager
                 return string.Empty;
 
             //Меняем слеши на обратные
-            var normalizedPath = path.Replace('/','\\');
+            var normalizedPath = path.Replace('/', '\\');
 
             //Поиск последнего слеша в пути
             var lastindex = normalizedPath.LastIndexOf('\\');
@@ -299,5 +302,336 @@ namespace Advanced_File_Manager
             return path.Substring(lastindex + 1);
         }
         #endregion
+
+
+        #region Хурма
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SolutionTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            TreeViewItem SelectedItem = FolderView.SelectedItem as TreeViewItem;
+            //string tag = "Default";
+            //if (new FileInfo(SelectedItem.Tag.ToString()).Attributes.HasFlag(FileAttributes.Directory))
+            //    tag = "FolderContext";                   
+        }
+
+        #endregion
+
+
+        #region Вызов контекстного меню
+        /// <summary>
+        /// Вызов контекстного меню
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openContextMenu(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter)
+            {
+                ContextMenu cm = FolderView.FindResource("File") as ContextMenu;
+                cm.IsOpen = true;
+            }
+        }
+
+        #endregion
+
+
+        #region Вставить
+        /// <summary>
+        /// Вставка файла
+        /// </summary>
+        /// <param name="sender2"></param>
+        /// <param name="e2"></param>
+        private void PasteFile(object sender2, RoutedEventArgs e2)
+        {
+            string copied = @"";                         //Прикрутить передачу пути   <---------------!
+            string copyTo = @"";                      //Прикрутить передачу пути   <---------------!
+            FileInfo fileInf = new FileInfo(copied);
+            if (fileInf.Exists)
+            {
+                File.Copy(copied, copyTo, true);
+            }
+        }
+
+        private void PasteDir(object sender2, RoutedEventArgs e2)
+        {
+            string copied = @"";                         //Прикрутить передачу пути   <---------------!
+            string copyTo = @"";                      //Прикрутить передачу пути   <---------------!
+            //Ппц тут писать
+        }
+
+        #endregion
+
+
+        #region Копировать
+        /// <summary>
+        /// Копирование файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CopyFile(object sender, RoutedEventArgs e)
+        {
+            //Прикрутить получение пути копируемого файла    <-------------------!
+        }
+
+        /// <summary>
+        /// Копирование каталога
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CopyDir(object sender, RoutedEventArgs e)
+        {
+            //Прикрутить получение пути копируемого каталога    <-------------------!
+        }
+
+        #endregion
+
+
+        #region Вырезать
+        /// <summary>
+        /// Перемещение файла   
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CutFile(object sender, RoutedEventArgs e)
+        {
+            string cutied = @"";                      //Прикрутить передачу пути   <---------------!
+            string cutTo = @"";                      //Прикрутить передачу пути   <---------------!
+            FileInfo fileInf = new FileInfo(cutied);
+            if (fileInf.Exists)
+            {
+                File.Move(cutied, cutTo);
+            }
+        }
+
+        /// <summary>
+        /// Перемещение каталога
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CutDir(object sender, RoutedEventArgs e)
+        {
+            string cutied = @"";                      //Прикрутить передачу пути   <---------------!
+            string cutTo = @"";                      //Прикрутить передачу пути   <---------------!
+            
+        }
+
+        #endregion
+
+
+        #region Переименовать
+        /// <summary>
+        /// Переименование файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RenameFile(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        /// <summary>
+        /// Переименование директории
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RenameDir(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
+
+
+        #region Удалить
+        /// <summary>
+        /// Удаление файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RemoveFile(object sender, RoutedEventArgs e)
+        {
+            string path = @"";                      //Прикрутить передачу пути   <---------------!
+            FileInfo fileInf = new FileInfo(path);
+            if (fileInf.Exists)
+            {
+                File.Delete(path);
+            }
+        }
+
+        /// <summary>
+        /// Удаление папки
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void RemoveDir(object sender, RoutedEventArgs e)
+        {
+            string dirName = @"C:\SomeFolder";     //Прикрутить передачу пути   <---------------!
+            try
+            {
+                DirectoryInfo dirInfo = new DirectoryInfo(dirName);
+                dirInfo.Delete(true);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        #endregion
+
+
+        #region Открыть файл
+        /// <summary>
+        /// Открытие файла
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void OpenFile(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+
+        #endregion
+
+
+        #region Создать папку
+        /// <summary>
+        /// Создание каталога
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void CreateDir(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        #endregion
     }
+
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#region Ficha
+//              (__)
+//              (oo)
+//        /------\/
+//       / |   || 
+//      * /\---/\
+//        ~~   ~~
+//..."Have you mooed today?"....
+#endregion
