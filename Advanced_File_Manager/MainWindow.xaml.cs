@@ -17,10 +17,76 @@ namespace Advanced_File_Manager
 {
 
     /// <summary>
+    /// Класс с автосвойствами для хранения информации о файлах
+    /// </summary>
+    public class Data
+    {
+        #region Поля
+
+        //Полный путь файла
+        private string filePath { get; set; } = null;
+
+
+        //Тип файла
+        private string fileType { get; set; }
+
+
+        //Буфер (при копировании или перемещении) <-помещается полный путь к файлу
+        private string buffer { get; set; } = null;
+
+
+        //Дополнительная информация о файле
+
+        #endregion
+
+        #region Методы взаимодействия
+
+        /// <summary>
+        /// Установка пути файла
+        /// </summary>
+        public void addFilePath(string path)
+        {
+            this.filePath = path;
+        }
+
+        /// <summary>
+        /// Получение пути файла
+        /// </summary>
+        /// <returns></returns>
+        public string getFilePath()
+        {
+            return this.filePath;
+        }
+
+        /// <summary>
+        /// Установка типа файла
+        /// </summary>
+        /// <param name="type"></param>
+        public void addFileType(string type)
+        {
+            this.fileType = type;
+        }
+
+        /// <summary>
+        /// Получение типа файла
+        /// </summary>
+        /// <returns></returns>
+        public string getFileType()
+        {
+            return this.fileType;
+        }
+
+        #endregion
+    }
+
+    /// <summary>
     /// Логика взаимодействия для MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        //Экземпляр класса Data, где хранится информация о выделенном файле
+        Data data = new Data();
+
         #region Конструктор
         /// <summary>
         /// Дефолтный конструктор
@@ -314,9 +380,15 @@ namespace Advanced_File_Manager
         private void SolutionTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             TreeViewItem SelectedItem = FolderView.SelectedItem as TreeViewItem;
-            //string tag = "Default";
-            //if (new FileInfo(SelectedItem.Tag.ToString()).Attributes.HasFlag(FileAttributes.Directory))
-            //    tag = "FolderContext";                   
+            //Отправка полного пути файла в коллекцию
+            if (SelectedItem.Tag.ToString() != null)
+            {
+                data.addFilePath(SelectedItem.Tag.ToString());
+            }
+
+            //Определение типа файла
+
+
         }
 
         #endregion
@@ -330,7 +402,7 @@ namespace Advanced_File_Manager
         /// <param name="e"></param>
         private void openContextMenu(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter)
+            if (e.Key == Key.Enter)
             {
                 ContextMenu cm = FolderView.FindResource("File") as ContextMenu;
                 cm.IsOpen = true;
@@ -385,7 +457,7 @@ namespace Advanced_File_Manager
         /// <param name="e"></param>
         private void CopyDir(object sender, RoutedEventArgs e)
         {
-            //Прикрутить получение пути копируемого каталога    <-------------------!
+            //Прикрутить получение пути копируемого каталога    <-------------------!           
         }
 
         #endregion
@@ -417,7 +489,7 @@ namespace Advanced_File_Manager
         {
             string cutied = @"";                      //Прикрутить передачу пути   <---------------!
             string cutTo = @"";                      //Прикрутить передачу пути   <---------------!
-            
+
         }
 
         #endregion
