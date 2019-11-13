@@ -641,7 +641,9 @@ namespace Advanced_File_Manager
             }
             else if (data.getFileType() == "directory")
             {
-
+                string path = data.getFilePath();
+                DirectoryInfo dirInfo = new DirectoryInfo(path);
+                dirInfo.Delete(true);
             }
         }
 
