@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.IO;
+using Microsoft.VisualBasic;
 
 namespace Advanced_File_Manager
 {
@@ -41,6 +42,11 @@ namespace Advanced_File_Manager
 
         //Имя файла, находящегося в буффере
         private string bufferFileName { get; set; } = "";
+
+
+        //Имя файла для создания
+        private string createFileName { get; set; } = "";
+
 
 
         //Дополнительная информация о файле
@@ -136,6 +142,24 @@ namespace Advanced_File_Manager
         public string getBufferFileName()
         {
             return this.bufferFileName;
+        }
+
+        /// <summary>
+        /// Добавление имени добавляемой папки
+        /// </summary>
+        /// <param name="name"></param>
+        public void addCreateFileName(string name)
+        {
+            this.createFileName = name;
+        }
+
+        /// <summary>
+        /// Получение имени добавляемой папки
+        /// </summary>
+        /// <returns></returns>
+        public string getCreateFileName()
+        {
+            return createFileName;
         }
         #endregion
     }
@@ -462,13 +486,13 @@ namespace Advanced_File_Manager
                 if (string.IsNullOrEmpty(nameOfFile))
                     data.addFileType("disk");
 
-                //Директория
-                else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Directory))
-                    data.addFileType("directory");
-
                 //Скрытая папка
                 else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Hidden))
                     data.addFileType("hidden");
+
+                //Директория
+                else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Directory))
+                    data.addFileType("directory");
 
                 //Файл
                 else data.addFileType("file");
@@ -493,14 +517,14 @@ namespace Advanced_File_Manager
 
                 ContextMenu cm = null;
 
-                if(data.getPathFromBuffer() == "" && data.getFileType() == "directory")
-                     cm = FolderView.FindResource("folder") as ContextMenu;
-                else if(data.getPathFromBuffer() == "" && data.getFileType() == "file")
-                     cm = FolderView.FindResource("File") as ContextMenu;    
-                else if(data.getPathFromBuffer() != "" && data.getFileType() == "directory")
-                     cm = FolderView.FindResource("folderCopied") as ContextMenu;    
-                else if(data.getPathFromBuffer() != "" && data.getFileType() == "file")
-                     cm = FolderView.FindResource("FileCoppied") as ContextMenu;
+                if (data.getPathFromBuffer() == "" && data.getFileType() == "directory")
+                    cm = FolderView.FindResource("folder") as ContextMenu;
+                else if (data.getPathFromBuffer() == "" && data.getFileType() == "file")
+                    cm = FolderView.FindResource("File") as ContextMenu;
+                else if (data.getPathFromBuffer() != "" && data.getFileType() == "directory")
+                    cm = FolderView.FindResource("folderCopied") as ContextMenu;
+                else if (data.getPathFromBuffer() != "" && data.getFileType() == "file")
+                    cm = FolderView.FindResource("FileCoppied") as ContextMenu;
 
                 if (cm != null)
                 {
@@ -658,7 +682,10 @@ namespace Advanced_File_Manager
         /// <param name="e"></param>
         private void OpenFile(object sender, RoutedEventArgs e)
         {
+            if (data.getFileType() == "file")
+            {
 
+            }
         }
 
 
@@ -674,6 +701,18 @@ namespace Advanced_File_Manager
         private void CreateDir(object sender, RoutedEventArgs e)
         {
 
+
+            if (data.getFileType() == "directory")
+            {
+                string path = data.getFilePath();
+                string subpath = data.getCreateFileName();
+                DirectoryInfo dirInfo = new DirectoryInfo(path);
+                if (!dirInfo.Exists)
+                {
+                    dirInfo.Create();
+                }
+                dirInfo.CreateSubdirectory(subpath);
+            }
         }
 
         #endregion
