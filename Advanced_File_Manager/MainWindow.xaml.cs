@@ -24,7 +24,7 @@ namespace Advanced_File_Manager
         #region Поля
 
         //Полный путь файла
-        private string filePath { get; set; } = null;
+        private string filePath { get; set; } = "";
 
 
         //Тип файла
@@ -32,7 +32,11 @@ namespace Advanced_File_Manager
 
 
         //Буфер (при копировании или перемещении) <-помещается полный путь к файлу
-        private string buffer { get; set; } = null;
+        private string buffer { get; set; } = "";
+
+
+        //Тип файла, находящегося в буффере
+        private string bufferFileType { get; set; } = "";
 
 
         //Дополнительная информация о файле
@@ -76,6 +80,41 @@ namespace Advanced_File_Manager
             return this.fileType;
         }
 
+        /// <summary>
+        /// Добавление пути копируемого файла в буфер
+        /// </summary>
+        /// <param name="path"></param>
+        public void addPathToBuffer(string path)
+        {
+            this.buffer = path;
+        }
+
+        /// <summary>
+        /// Возвращение пути копируемого файла из буффера
+        /// </summary>
+        /// <returns></returns>
+        public string getPathFromBuffer()
+        {
+            return this.buffer;
+        }
+
+        /// <summary>
+        /// Добавление типа копируемого файла
+        /// </summary>
+        /// <param name="type"></param>
+        public void addFileTypeInBuffer(string type)
+        {
+            this.bufferFileType = type;
+        }
+
+        /// <summary>
+        /// Получение типа копируемого файла
+        /// </summary>
+        /// <returns></returns>
+        public string getFileTypeInBuffer()
+        {
+            return this.bufferFileType;
+        }
         #endregion
     }
 
@@ -380,13 +419,37 @@ namespace Advanced_File_Manager
         private void SolutionTree_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             TreeViewItem SelectedItem = FolderView.SelectedItem as TreeViewItem;
+
+            //Полный путь к файлу
+            var path = SelectedItem.Tag.ToString();
+
+            //Имя файла
+            var nameOfFile = MainWindow.GetFileFolderName(path);
+
             //Отправка полного пути файла в коллекцию
             if (SelectedItem.Tag.ToString() != null)
             {
                 data.addFilePath(SelectedItem.Tag.ToString());
             }
 
+            //
             //Определение типа файла
+            //
+
+            //Если имя пустое, то это диск
+            if (string.IsNullOrEmpty(nameOfFile))
+                data.addFileType("disk");
+
+            //Директория
+            else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Directory))
+                data.addFileType("directory");
+
+            //Скрытая папка
+            else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Hidden))
+                data.addFileType("hidden");
+
+            //Файл
+            else data.addFileType("file");
 
 
         }
@@ -404,6 +467,7 @@ namespace Advanced_File_Manager
         {
             if (e.Key == Key.Enter)
             {
+                //Логика выбора контекстного меню
                 ContextMenu cm = FolderView.FindResource("File") as ContextMenu;
                 cm.IsOpen = true;
             }
@@ -447,17 +511,11 @@ namespace Advanced_File_Manager
         /// <param name="e"></param>
         private void CopyFile(object sender, RoutedEventArgs e)
         {
-            //Прикрутить получение пути копируемого файла    <-------------------!
-        }
+            //Передача в буффер пути выбранного файла
+            data.addFileType(data.getFilePath());
 
-        /// <summary>
-        /// Копирование каталога
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CopyDir(object sender, RoutedEventArgs e)
-        {
-            //Прикрутить получение пути копируемого каталога    <-------------------!           
+            //Передача типа копируемого файла
+            data.addFileTypeInBuffer(data.getFileType());
         }
 
         #endregion
@@ -471,25 +529,20 @@ namespace Advanced_File_Manager
         /// <param name="e"></param>
         private void CutFile(object sender, RoutedEventArgs e)
         {
-            string cutied = @"";                      //Прикрутить передачу пути   <---------------!
-            string cutTo = @"";                      //Прикрутить передачу пути   <---------------!
-            FileInfo fileInf = new FileInfo(cutied);
-            if (fileInf.Exists)
+            if (data.getFileTypeInBuffer() == "file")
             {
-                File.Move(cutied, cutTo);
+                string cutied = data.getPathFromBuffer();                     
+                string cutTo = data.getFilePath();                      
+                FileInfo fileInf = new FileInfo(cutied);
+                if (fileInf.Exists)
+                {
+                    File.Move(cutied, cutTo);
+                }
             }
-        }
+            else if (data.getFileTypeInBuffer() == "directory")
+            {
 
-        /// <summary>
-        /// Перемещение каталога
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void CutDir(object sender, RoutedEventArgs e)
-        {
-            string cutied = @"";                      //Прикрутить передачу пути   <---------------!
-            string cutTo = @"";                      //Прикрутить передачу пути   <---------------!
-
+            }
         }
 
         #endregion
@@ -527,30 +580,17 @@ namespace Advanced_File_Manager
         /// <param name="e"></param>
         private void RemoveFile(object sender, RoutedEventArgs e)
         {
-            string path = @"";                      //Прикрутить передачу пути   <---------------!
-            FileInfo fileInf = new FileInfo(path);
-            if (fileInf.Exists)
+            if (data.getFileType() == "file")
             {
-                File.Delete(path);
-            }
-        }
+                string path = data.getFilePath();                 
+                FileInfo fileInf = new FileInfo(path);
+                if (fileInf.Exists)
+                {
+                    File.Delete(path);
+                }
+            }else if(data.getFileType() == "directory")
+            {
 
-        /// <summary>
-        /// Удаление папки
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RemoveDir(object sender, RoutedEventArgs e)
-        {
-            string dirName = @"C:\SomeFolder";     //Прикрутить передачу пути   <---------------!
-            try
-            {
-                DirectoryInfo dirInfo = new DirectoryInfo(dirName);
-                dirInfo.Delete(true);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
             }
         }
 
