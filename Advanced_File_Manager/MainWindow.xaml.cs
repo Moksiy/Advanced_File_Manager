@@ -504,6 +504,7 @@ namespace Advanced_File_Manager
 
                 if (cm != null)
                 {
+                    //Вызов
                     cm.IsOpen = true;
                 }
             }
