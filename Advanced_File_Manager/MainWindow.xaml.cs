@@ -735,7 +735,7 @@ namespace Advanced_File_Manager
             if (data.getFileTypeInBuffer() == "file")
             {
                 string cutied = data.getPathFromBuffer();
-                string cutTo = data.getFilePath();
+                string cutTo = data.getFilePath() + "\\"+data.getBufferFileName();
                 FileInfo fileInf = new FileInfo(cutied);
                 if (fileInf.Exists)
                 {
