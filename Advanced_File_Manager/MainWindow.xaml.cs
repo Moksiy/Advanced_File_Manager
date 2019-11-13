@@ -39,6 +39,10 @@ namespace Advanced_File_Manager
         private string bufferFileType { get; set; } = "";
 
 
+        //Имя файла, находящегося в буффере
+        private string bufferFileName { get; set; } = "";
+
+
         //Дополнительная информация о файле
 
         #endregion
@@ -114,6 +118,24 @@ namespace Advanced_File_Manager
         public string getFileTypeInBuffer()
         {
             return this.bufferFileType;
+        }
+
+        /// <summary>
+        /// Добавление имени копируемого файла
+        /// </summary>
+        /// <param name="name"></param>
+        public void addBufferFileName(string name)
+        {
+            this.bufferFileName = name;
+        }
+
+        /// <summary>
+        /// Получение имени копируемого файла
+        /// </summary>
+        /// <returns></returns>
+        public string getBufferFileName()
+        {
+            return this.bufferFileName;
         }
         #endregion
     }
@@ -420,38 +442,38 @@ namespace Advanced_File_Manager
         {
             TreeViewItem SelectedItem = FolderView.SelectedItem as TreeViewItem;
 
-            //Полный путь к файлу
-            var path = SelectedItem.Tag.ToString();
-
-            //Имя файла
-            var nameOfFile = MainWindow.GetFileFolderName(path);
-
             //Отправка полного пути файла в коллекцию
             if (SelectedItem.Tag.ToString() != null)
             {
                 data.addFilePath(SelectedItem.Tag.ToString());
+
+                //Полный путь к файлу
+                var path = SelectedItem.Tag.ToString();
+
+                //Имя файла
+                var nameOfFile = MainWindow.GetFileFolderName(path);
+
+
+                //
+                //Определение типа файла
+                //
+
+                //Если имя пустое, то это диск
+                if (string.IsNullOrEmpty(nameOfFile))
+                    data.addFileType("disk");
+
+                //Директория
+                else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Directory))
+                    data.addFileType("directory");
+
+                //Скрытая папка
+                else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Hidden))
+                    data.addFileType("hidden");
+
+                //Файл
+                else data.addFileType("file");
+
             }
-
-            //
-            //Определение типа файла
-            //
-
-            //Если имя пустое, то это диск
-            if (string.IsNullOrEmpty(nameOfFile))
-                data.addFileType("disk");
-
-            //Директория
-            else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Directory))
-                data.addFileType("directory");
-
-            //Скрытая папка
-            else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Hidden))
-                data.addFileType("hidden");
-
-            //Файл
-            else data.addFileType("file");
-
-
         }
 
         #endregion
@@ -468,7 +490,7 @@ namespace Advanced_File_Manager
             if (e.Key == Key.Enter)
             {
                 //Логика выбора контекстного меню
-                ContextMenu cm = FolderView.FindResource("File") as ContextMenu;
+                ContextMenu cm = FolderView.FindResource("folderCopied") as ContextMenu;
                 cm.IsOpen = true;
             }
         }
@@ -484,19 +506,30 @@ namespace Advanced_File_Manager
         /// <param name="e2"></param>
         private void PasteFile(object sender2, RoutedEventArgs e2)
         {
-            if (data.getFileTypeInBuffer() == "file")
+            if (data.getFileTypeInBuffer() == "file" && data.getFileType() == "directory")
             {
-                string copied = data.getPathFromBuffer();                   
-                string copyTo = data.getFilePath();             
+                string copied = data.getPathFromBuffer();
+                string copyTo = data.getFilePath() + "\\" + data.getBufferFileName();
                 FileInfo fileInf = new FileInfo(copied);
                 if (fileInf.Exists)
                 {
-                    File.Copy(copied, copyTo, true);
+                    try
+                    {
+                        File.Copy(copied, copyTo, true);
+                    }
+                    catch (System.IO.IOException) //Если файл уже содержится
+                    {
+                        MessageBox.Show("Файл уже содержится");
+                    }
                 }
-            }else if(data.getFileTypeInBuffer() == "directory")
+            }
+            else if (data.getFileTypeInBuffer() == "directory")
             {
                 //доделат
             }
+
+            //Обновление treeView
+
         }
 
         #endregion
@@ -515,6 +548,9 @@ namespace Advanced_File_Manager
 
             //Передача типа копируемого файла
             data.addFileTypeInBuffer(data.getFileType());
+
+            //Передача имени копируемого файла
+            data.addBufferFileName(MainWindow.GetFileFolderName(data.getFilePath()));
         }
 
         #endregion
@@ -530,8 +566,8 @@ namespace Advanced_File_Manager
         {
             if (data.getFileTypeInBuffer() == "file")
             {
-                string cutied = data.getPathFromBuffer();                     
-                string cutTo = data.getFilePath();                      
+                string cutied = data.getPathFromBuffer();
+                string cutTo = data.getFilePath();
                 FileInfo fileInf = new FileInfo(cutied);
                 if (fileInf.Exists)
                 {
@@ -581,13 +617,14 @@ namespace Advanced_File_Manager
         {
             if (data.getFileType() == "file")
             {
-                string path = data.getFilePath();                 
+                string path = data.getFilePath();
                 FileInfo fileInf = new FileInfo(path);
                 if (fileInf.Exists)
                 {
                     File.Delete(path);
                 }
-            }else if(data.getFileType() == "directory")
+            }
+            else if (data.getFileType() == "directory")
             {
 
             }
