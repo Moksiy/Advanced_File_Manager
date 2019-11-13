@@ -48,6 +48,10 @@ namespace Advanced_File_Manager
         private string createFileName { get; set; } = "";
 
 
+        //Булева переменная для определения действия над файлом скопировать\вырезать
+        private bool isCut { get; set; } = false;
+
+
 
         //Дополнительная информация о файле
 
@@ -160,6 +164,24 @@ namespace Advanced_File_Manager
         public string getCreateFileName()
         {
             return createFileName;
+        }
+
+        /// <summary>
+        /// Добавление результата
+        /// </summary>
+        /// <param name="cut"></param>
+        public void addIsCut(bool cut)
+        {
+            this.isCut = cut;
+        }
+
+        /// <summary>
+        /// Возвращение переменной
+        /// </summary>
+        /// <returns></returns>
+        public bool getIsCut()
+        {
+            return this.isCut;
         }
         #endregion
     }
@@ -545,28 +567,39 @@ namespace Advanced_File_Manager
         /// <param name="e2"></param>
         private void PasteFile(object sender2, RoutedEventArgs e2)
         {
-            if (data.getFileTypeInBuffer() == "file" && data.getFileType() == "directory")
+            if (data.getIsCut() == false)
             {
-                string copied = data.getPathFromBuffer();
-                string copyTo = data.getFilePath() + "\\" + data.getBufferFileName();
-                FileInfo fileInf = new FileInfo(copied);
-                if (fileInf.Exists)
+                if (data.getFileTypeInBuffer() == "file" && data.getFileType() == "directory")
                 {
-                    try
+                    string copied = data.getPathFromBuffer();
+                    string copyTo = data.getFilePath() + "\\" + data.getBufferFileName();
+                    FileInfo fileInf = new FileInfo(copied);
+                    if (fileInf.Exists)
                     {
-                        File.Copy(copied, copyTo, true);
-                    }
-                    catch (System.IO.IOException) //Если файл уже содержится
-                    {
-                        MessageBox.Show("Файл уже содержится");
+                        try
+                        {
+                            File.Copy(copied, copyTo, true);
+                        }
+                        catch (System.IO.IOException) //Если файл уже содержится
+                        {
+                            MessageBox.Show("Файл уже содержится");
+                        }
                     }
                 }
-            }
-            else if (data.getFileTypeInBuffer() == "directory")
+                else if (data.getFileTypeInBuffer() == "directory")
+                {
+                    //доделат
+                }
+            }else if(data.getIsCut() == true)
             {
-                //доделат
+                CutFile(null, null);
             }
 
+            if (data.getIsCut() == true)
+            {
+                data.addPathToBuffer("");
+                data.addIsCut(false);
+            }
             //Обновление treeView
 
         }
@@ -590,6 +623,24 @@ namespace Advanced_File_Manager
 
             //Передача имени копируемого файла
             data.addBufferFileName(MainWindow.GetFileFolderName(data.getFilePath()));
+
+            //Передача типа перемещение файла
+            data.addIsCut(false);
+        }
+
+        private void CutFile_(object sender, RoutedEventArgs e)
+        {
+            //Передача в буффер пути выбранного файла
+            data.addPathToBuffer(data.getFilePath());
+
+            //Передача типа копируемого файла
+            data.addFileTypeInBuffer(data.getFileType());
+
+            //Передача имени копируемого файла
+            data.addBufferFileName(MainWindow.GetFileFolderName(data.getFilePath()));
+
+            //Передача типа перемещение файла
+            data.addIsCut(true);
         }
 
         #endregion
@@ -617,6 +668,8 @@ namespace Advanced_File_Manager
             {
                 //доделат
             }
+            data.addPathToBuffer("");
+            data.addIsCut(false);
         }
 
         #endregion
@@ -688,7 +741,6 @@ namespace Advanced_File_Manager
             }
         }
 
-
         #endregion
 
 
@@ -716,6 +768,54 @@ namespace Advanced_File_Manager
         }
 
         #endregion
+
+        /// <summary>
+        /// Взаимодействие с помощью клавиш F
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Functional(object sender, KeyEventArgs e)
+        {
+            switch (e.Key)
+            {
+                //Обновить окно
+                case Key.F2:
+                    break;
+
+                //Открыть файл
+                case Key.F3:
+                    OpenFile(null, null);
+                    break;
+
+                //Вставить файл
+                case Key.F4:
+
+                    break;
+
+                //Копировать файл
+                case Key.F5:
+                    CopyFile(null, null);
+                    break;
+
+                //Переименовать файл
+                case Key.F6:
+                    if (data.getFileType() == "file")
+                        RenameFile(null, null);
+                    if (data.getFileType() == "directory")
+                        RenameDir(null, null);
+                    break;
+
+                //Создать каталог
+                case Key.F7:
+                    CreateDir(null, null);
+                    break;
+
+                //Удалить файл
+                case Key.F8:
+                    RemoveFile(null, null);
+                    break;
+            }
+        }
     }
 
 
