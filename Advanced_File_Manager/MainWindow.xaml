@@ -58,7 +58,7 @@
         </TreeView>
 
         <TreeView x:Name="FolderView2" Background="#FF282828" Foreground="#FFC7C7C7" Margin="605,53,20,20"
-                   SelectedItemChanged="SolutionTree_SelectedItemChanged" KeyDown="openContextMenu">
+                   SelectedItemChanged="SolutionTree_SelectedItemChanged2" KeyDown="openContextMenu2">
             <TreeView.Resources>
                 <ContextMenu x:Key ="File">
                     <MenuItem Header="Открыть" Click="OpenFile"/>

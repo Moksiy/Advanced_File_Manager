@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.IO;
 using Microsoft.VisualBasic;
+using System.Diagnostics;
 
 namespace Advanced_File_Manager
 {
@@ -488,13 +489,17 @@ namespace Advanced_File_Manager
         {
             TreeViewItem SelectedItem = FolderView.SelectedItem as TreeViewItem;
 
+            string path = "";
+
+            try { path = SelectedItem.Tag.ToString(); } catch { }
+
             //Отправка полного пути файла в коллекцию
-            if (SelectedItem.Tag.ToString() != null)
+            if (path != "")
             {
                 data.addFilePath(SelectedItem.Tag.ToString());
 
                 //Полный путь к файлу
-                var path = SelectedItem.Tag.ToString();
+                path = SelectedItem.Tag.ToString();
 
                 //Имя файла
                 var nameOfFile = MainWindow.GetFileFolderName(path);
@@ -522,6 +527,50 @@ namespace Advanced_File_Manager
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void SolutionTree_SelectedItemChanged2(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            TreeViewItem SelectedItem = FolderView2.SelectedItem as TreeViewItem;
+
+            string path = "";
+
+            //Полный путь к файлу
+            try { path = SelectedItem.Tag.ToString(); } catch { }
+
+            //Отправка полного пути файла в коллекцию
+            if (path != "")
+            {
+                data.addFilePath(SelectedItem.Tag.ToString());
+
+                //Имя файла
+                var nameOfFile = MainWindow.GetFileFolderName(path);
+
+
+                //
+                //Определение типа файла
+                //
+
+                //Если имя пустое, то это диск
+                if (string.IsNullOrEmpty(nameOfFile))
+                    data.addFileType("disk");
+
+                //Скрытая папка
+                else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Hidden))
+                    data.addFileType("hidden");
+
+                //Директория
+                else if (new FileInfo(path).Attributes.HasFlag(FileAttributes.Directory))
+                    data.addFileType("directory");
+
+                //Файл
+                else data.addFileType("file");
+
+            }
+        }
         #endregion
 
 
@@ -547,6 +596,35 @@ namespace Advanced_File_Manager
                     cm = FolderView.FindResource("folderCopied") as ContextMenu;
                 else if (data.getPathFromBuffer() != "" && data.getFileType() == "file")
                     cm = FolderView.FindResource("FileCoppied") as ContextMenu;
+
+                if (cm != null)
+                {
+                    //Вызов
+                    cm.IsOpen = true;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Вызов контекстного меню для 2 окна
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void openContextMenu2(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                //Логика выбора контекстного меню
+                ContextMenu cm = null;
+
+                if (data.getPathFromBuffer() == "" && data.getFileType() == "directory")
+                    cm = FolderView2.FindResource("folder") as ContextMenu;
+                else if (data.getPathFromBuffer() == "" && data.getFileType() == "file")
+                    cm = FolderView2.FindResource("File") as ContextMenu;
+                else if (data.getPathFromBuffer() != "" && data.getFileType() == "directory")
+                    cm = FolderView2.FindResource("folderCopied") as ContextMenu;
+                else if (data.getPathFromBuffer() != "" && data.getFileType() == "file")
+                    cm = FolderView2.FindResource("FileCoppied") as ContextMenu;
 
                 if (cm != null)
                 {
@@ -737,7 +815,7 @@ namespace Advanced_File_Manager
         {
             if (data.getFileType() == "file")
             {
-
+                Process.Start(data.getFilePath());
             }
         }
 
@@ -752,8 +830,6 @@ namespace Advanced_File_Manager
         /// <param name="e"></param>
         private void CreateDir(object sender, RoutedEventArgs e)
         {
-
-
             if (data.getFileType() == "directory")
             {
                 string path = data.getFilePath();
@@ -789,7 +865,8 @@ namespace Advanced_File_Manager
 
                 //Вставить файл
                 case Key.F4:
-
+                    if(data.getPathFromBuffer() != "")
+                        PasteFile(null, null);
                     break;
 
                 //Копировать файл
@@ -815,7 +892,7 @@ namespace Advanced_File_Manager
                     RemoveFile(null, null);
                     break;
             }
-        }
+        }      
     }
 
 
