@@ -490,8 +490,22 @@ namespace Advanced_File_Manager
             if (e.Key == Key.Enter)
             {
                 //Логика выбора контекстного меню
-                ContextMenu cm = FolderView.FindResource("folderCopied") as ContextMenu;
-                cm.IsOpen = true;
+
+                ContextMenu cm = null;
+
+                if(data.getPathFromBuffer() == "" && data.getFileType() == "directory")
+                     cm = FolderView.FindResource("folder") as ContextMenu;
+                else if(data.getPathFromBuffer() == "" && data.getFileType() == "file")
+                     cm = FolderView.FindResource("File") as ContextMenu;    
+                else if(data.getPathFromBuffer() != "" && data.getFileType() == "directory")
+                     cm = FolderView.FindResource("folderCopied") as ContextMenu;    
+                else if(data.getPathFromBuffer() != "" && data.getFileType() == "file")
+                     cm = FolderView.FindResource("FileCoppied") as ContextMenu;
+
+                if (cm != null)
+                {
+                    cm.IsOpen = true;
+                }
             }
         }
 
