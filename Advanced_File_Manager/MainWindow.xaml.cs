@@ -484,20 +484,19 @@ namespace Advanced_File_Manager
         /// <param name="e2"></param>
         private void PasteFile(object sender2, RoutedEventArgs e2)
         {
-            string copied = @"";                         //Прикрутить передачу пути   <---------------!
-            string copyTo = @"";                      //Прикрутить передачу пути   <---------------!
-            FileInfo fileInf = new FileInfo(copied);
-            if (fileInf.Exists)
+            if (data.getFileTypeInBuffer() == "file")
             {
-                File.Copy(copied, copyTo, true);
+                string copied = data.getPathFromBuffer();                   
+                string copyTo = data.getFilePath();             
+                FileInfo fileInf = new FileInfo(copied);
+                if (fileInf.Exists)
+                {
+                    File.Copy(copied, copyTo, true);
+                }
+            }else if(data.getFileTypeInBuffer() == "directory")
+            {
+                //доделат
             }
-        }
-
-        private void PasteDir(object sender2, RoutedEventArgs e2)
-        {
-            string copied = @"";                         //Прикрутить передачу пути   <---------------!
-            string copyTo = @"";                      //Прикрутить передачу пути   <---------------!
-            //Ппц тут писать
         }
 
         #endregion
@@ -512,7 +511,7 @@ namespace Advanced_File_Manager
         private void CopyFile(object sender, RoutedEventArgs e)
         {
             //Передача в буффер пути выбранного файла
-            data.addFileType(data.getFilePath());
+            data.addPathToBuffer(data.getFilePath());
 
             //Передача типа копируемого файла
             data.addFileTypeInBuffer(data.getFileType());
@@ -541,7 +540,7 @@ namespace Advanced_File_Manager
             }
             else if (data.getFileTypeInBuffer() == "directory")
             {
-
+                //доделат
             }
         }
 
