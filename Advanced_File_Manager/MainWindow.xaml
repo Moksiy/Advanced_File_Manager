@@ -105,5 +105,7 @@
                 </Style>
             </TreeView.Resources>
         </TreeView>
+        <Button Content="" HorizontalAlignment="Left" Margin="502,605,0,0" VerticalAlignment="Top" Width="200" Height="15" Background="#FF282828" Click="Help"/>
+        <TextBlock Name="HelpMenu" HorizontalAlignment="Left" Margin="57,10,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="25" Width="1105" Foreground="#FFC7C7C7" FontSize="16"/>
     </Grid>
 </Window>

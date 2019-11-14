@@ -668,18 +668,26 @@ namespace Advanced_File_Manager
                 {
                     //доделат
                 }
+                //Вырезать
             }else if(data.getIsCut() == true)
-            {
-                CutFile(null, null);
+            {   //Файл
+                if (data.getFileTypeInBuffer() == "file")
+                {
+                    CutFile(null, null);
+                //Директория
+                }else if(data.getFileTypeInBuffer() == "directory")
+                {
+                    CutFile(null, null);
+                }
             }
-
+            //Обнуление после перемещения
             if (data.getIsCut() == true)
             {
                 data.addPathToBuffer("");
                 data.addIsCut(false);
             }
             //Обновление treeView
-
+            
         }
 
         #endregion
@@ -743,8 +751,14 @@ namespace Advanced_File_Manager
                 }
             }
             else if (data.getFileTypeInBuffer() == "directory")
-            {
-                //доделат
+                {
+                string oldPath = data.getPathFromBuffer();
+                string newPath = data.getFilePath()+"\\"+data.getBufferFileName();
+                DirectoryInfo dirInfo = new DirectoryInfo(oldPath);
+                if (dirInfo.Exists && Directory.Exists(newPath) == false)
+                {
+                    dirInfo.MoveTo(newPath);
+                }
             }
             data.addPathToBuffer("");
             data.addIsCut(false);
@@ -856,6 +870,7 @@ namespace Advanced_File_Manager
             {
                 //Обновить окно
                 case Key.F2:
+                    //хуета 
                     break;
 
                 //Открыть файл
@@ -892,7 +907,32 @@ namespace Advanced_File_Manager
                     RemoveFile(null, null);
                     break;
             }
-        }      
+        }
+
+        /// <summary>
+        /// Кнопочка помощи
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void Help(object sender, RoutedEventArgs e)
+        {
+            if (HelpMenu.Text == "")
+            {
+                HelpMenu.Text = "F2 - Обновить" +
+                    new string(' ',12) +
+                    "F3 - Открыть" + 
+                    new string(' ',12) +
+                    "F4 - Вставить" +
+                    new string(' ',12) +
+                    "F5 - Копировать" +
+                    new string(' ',12) +
+                    "F6 - Переименовать" +
+                    new string(' ',12) +
+                    "F7 - Создать" + 
+                    new string(' ',12) +
+                    "F8 - Удалить";
+            }else { HelpMenu.Text = ""; }
+        }
     }
 
 
