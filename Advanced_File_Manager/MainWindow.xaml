@@ -45,7 +45,7 @@
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>
                             <DataTemplate>
-                                <StackPanel Orientation="Horizontal" ContextMenu="{Binding}" KeyDown="Functional">
+                                <StackPanel Orientation="Horizontal" ContextMenu="{Binding}">
                                     <Image Width="20" Margin="3" Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor,
                                      AncestorType={x:Type TreeViewItem}}, Path=Tag, Converter={x:Static local:HeaderTolmageConverter.Instance}}"/>
                                     <TextBlock VerticalAlignment="Center" Text="{Binding}" FontSize="13" Foreground="#FFC7C7C7"/>

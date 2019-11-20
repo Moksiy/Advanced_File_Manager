@@ -30,7 +30,7 @@ namespace Advanced_File_Manager
 
 
         //Тип файла
-        private string fileType { get; set; }
+        private string fileType { get; set; } = "";
 
 
         //Буфер (при копировании или перемещении) <-помещается полный путь к файлу
@@ -43,6 +43,8 @@ namespace Advanced_File_Manager
 
         //Имя файла, находящегося в буффере
         private string bufferFileName { get; set; } = "";
+
+        public bool isUpdate { get; set; } = false;
 
 
         //Имя файла для создания
@@ -264,12 +266,17 @@ namespace Advanced_File_Manager
         {
             #region Инициализация проверок
             var item = (TreeViewItem)sender;
+            if (data.isUpdate) { item.Items.Clear(); }
+
             //Если в item содержатся некорректные данные
-            if (item.Items.Count != 1 || item.Items[0] != null)
+            if ((item.Items.Count != 1 || item.Items[0] != null) && data.isUpdate == false)
+            {
                 return;
+            }else { data.isUpdate = false; }
 
             //Очистка
             item.Items.Clear();
+
 
             //Получаем полный путь к папке
             var fullPath = (string)item.Tag;
@@ -523,7 +530,6 @@ namespace Advanced_File_Manager
 
                 //Файл
                 else data.addFileType("file");
-
             }
         }
 
@@ -569,6 +575,7 @@ namespace Advanced_File_Manager
                 //Файл
                 else data.addFileType("file");
 
+
             }
         }
         #endregion
@@ -602,7 +609,7 @@ namespace Advanced_File_Manager
                     //Вызов
                     cm.IsOpen = true;
                 }
-            }
+            }else { Functional(sender, e); }
         }
 
         /// <summary>
@@ -669,13 +676,15 @@ namespace Advanced_File_Manager
                     //доделат
                 }
                 //Вырезать
-            }else if(data.getIsCut() == true)
+            }
+            else if (data.getIsCut() == true)
             {   //Файл
                 if (data.getFileTypeInBuffer() == "file")
                 {
                     CutFile(null, null);
-                //Директория
-                }else if(data.getFileTypeInBuffer() == "directory")
+                    //Директория
+                }
+                else if (data.getFileTypeInBuffer() == "directory")
                 {
                     CutFile(null, null);
                 }
@@ -686,8 +695,6 @@ namespace Advanced_File_Manager
                 data.addPathToBuffer("");
                 data.addIsCut(false);
             }
-            //Обновление treeView
-            
         }
 
         #endregion
@@ -743,7 +750,7 @@ namespace Advanced_File_Manager
             if (data.getFileTypeInBuffer() == "file")
             {
                 string cutied = data.getPathFromBuffer();
-                string cutTo = data.getFilePath() + "\\"+data.getBufferFileName();
+                string cutTo = data.getFilePath() + "\\" + data.getBufferFileName();
                 FileInfo fileInf = new FileInfo(cutied);
                 if (fileInf.Exists)
                 {
@@ -751,9 +758,9 @@ namespace Advanced_File_Manager
                 }
             }
             else if (data.getFileTypeInBuffer() == "directory")
-                {
+            {
                 string oldPath = data.getPathFromBuffer();
-                string newPath = data.getFilePath()+"\\"+data.getBufferFileName();
+                string newPath = data.getFilePath() + "\\" + data.getBufferFileName();
                 DirectoryInfo dirInfo = new DirectoryInfo(oldPath);
                 if (dirInfo.Exists && Directory.Exists(newPath) == false)
                 {
@@ -814,6 +821,7 @@ namespace Advanced_File_Manager
                 DirectoryInfo dirInfo = new DirectoryInfo(path);
                 dirInfo.Delete(true);
             }
+            data.isUpdate = true;
         }
 
         #endregion
@@ -846,14 +854,18 @@ namespace Advanced_File_Manager
         {
             if (data.getFileType() == "directory")
             {
+                string name = Microsoft.VisualBasic.Interaction.InputBox("Введите название папки:");
+                if (name != null && name != "") { data.addCreateFileName(name); }
                 string path = data.getFilePath();
                 string subpath = data.getCreateFileName();
                 DirectoryInfo dirInfo = new DirectoryInfo(path);
                 if (!dirInfo.Exists)
                 {
                     dirInfo.Create();
+                    data.isUpdate = true;
                 }
                 dirInfo.CreateSubdirectory(subpath);
+                data.isUpdate = true;
             }
         }
 
@@ -870,7 +882,7 @@ namespace Advanced_File_Manager
             {
                 //Обновить окно
                 case Key.F2:
-                    //хуета 
+                    data.isUpdate = true;
                     break;
 
                 //Открыть файл
@@ -880,7 +892,7 @@ namespace Advanced_File_Manager
 
                 //Вставить файл
                 case Key.F4:
-                    if(data.getPathFromBuffer() != "")
+                    if (data.getPathFromBuffer() != "")
                         PasteFile(null, null);
                     break;
 
@@ -919,19 +931,20 @@ namespace Advanced_File_Manager
             if (HelpMenu.Text == "")
             {
                 HelpMenu.Text = "F2 - Обновить" +
-                    new string(' ',12) +
-                    "F3 - Открыть" + 
-                    new string(' ',12) +
+                    new string(' ', 12) +
+                    "F3 - Открыть" +
+                    new string(' ', 12) +
                     "F4 - Вставить" +
-                    new string(' ',12) +
+                    new string(' ', 12) +
                     "F5 - Копировать" +
-                    new string(' ',12) +
+                    new string(' ', 12) +
                     "F6 - Переименовать" +
-                    new string(' ',12) +
-                    "F7 - Создать" + 
-                    new string(' ',12) +
+                    new string(' ', 12) +
+                    "F7 - Создать" +
+                    new string(' ', 12) +
                     "F8 - Удалить";
-            }else { HelpMenu.Text = ""; }
+            }
+            else { HelpMenu.Text = ""; }
         }
     }
 
