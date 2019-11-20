@@ -266,6 +266,7 @@ namespace Advanced_File_Manager
         {
             #region Инициализация проверок
             var item = (TreeViewItem)sender;
+            if (item.Tag.ToString().Length > 4) { data.isUpdate = true; }
             if (data.isUpdate) { item.Items.Clear(); }
 
             //Если в item содержатся некорректные данные
@@ -369,9 +370,15 @@ namespace Advanced_File_Manager
         {
             #region Инициализация проверок
             var item = (TreeViewItem)sender;
+            if (item.Tag.ToString().Length > 4) { data.isUpdate = true; }
+            if (data.isUpdate) { item.Items.Clear(); }
+
             //Если в item содержатся некорректные данные
-            if (item.Items.Count != 1 || item.Items[0] != null)
+            if ((item.Items.Count != 1 || item.Items[0] != null) && data.isUpdate == false)
+            {
                 return;
+            }
+            else { data.isUpdate = false; }
 
             //Очистка
             item.Items.Clear();
