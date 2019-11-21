@@ -266,7 +266,6 @@ namespace Advanced_File_Manager
         {
             #region Инициализация проверок
             var item = (TreeViewItem)sender;
-            if (item.Tag.ToString().Length > 4) { data.isUpdate = true; }
             if (data.isUpdate) { item.Items.Clear(); }
 
             //Если в item содержатся некорректные данные
@@ -702,6 +701,7 @@ namespace Advanced_File_Manager
                 data.addPathToBuffer("");
                 data.addIsCut(false);
             }
+            data.isUpdate = true;
         }
 
         #endregion
@@ -789,7 +789,7 @@ namespace Advanced_File_Manager
         /// <param name="e"></param>
         private void RenameFile(object sender, RoutedEventArgs e)
         {
-
+            data.isUpdate = true;
         }
 
         /// <summary>
@@ -799,7 +799,7 @@ namespace Advanced_File_Manager
         /// <param name="e"></param>
         private void RenameDir(object sender, RoutedEventArgs e)
         {
-
+            data.isUpdate = true;
         }
 
         #endregion
@@ -846,6 +846,7 @@ namespace Advanced_File_Manager
             {
                 Process.Start(data.getFilePath());
             }
+            data.isUpdate = true;
         }
 
         #endregion
@@ -887,11 +888,6 @@ namespace Advanced_File_Manager
         {
             switch (e.Key)
             {
-                //Обновить окно
-                case Key.F2:
-                    data.isUpdate = true;
-                    break;
-
                 //Открыть файл
                 case Key.F3:
                     OpenFile(null, null);
@@ -937,18 +933,17 @@ namespace Advanced_File_Manager
         {
             if (HelpMenu.Text == "")
             {
-                HelpMenu.Text = "F2 - Обновить" +
-                    new string(' ', 12) +
+                HelpMenu.Text =
                     "F3 - Открыть" +
-                    new string(' ', 12) +
+                    new string(' ', 19) +
                     "F4 - Вставить" +
-                    new string(' ', 12) +
+                    new string(' ', 19) +
                     "F5 - Копировать" +
-                    new string(' ', 12) +
+                    new string(' ', 19) +
                     "F6 - Переименовать" +
-                    new string(' ', 12) +
+                    new string(' ', 19) +
                     "F7 - Создать" +
-                    new string(' ', 12) +
+                    new string(' ', 19) +
                     "F8 - Удалить";
             }
             else { HelpMenu.Text = ""; }
