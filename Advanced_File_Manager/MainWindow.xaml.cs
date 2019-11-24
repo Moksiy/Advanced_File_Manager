@@ -272,7 +272,8 @@ namespace Advanced_File_Manager
             if ((item.Items.Count != 1 || item.Items[0] != null) && data.isUpdate == false)
             {
                 return;
-            }else { data.isUpdate = false; }
+            }
+            else { data.isUpdate = false; }
 
             //Очистка
             item.Items.Clear();
@@ -488,6 +489,38 @@ namespace Advanced_File_Manager
             //Возвращаем имя после обратного слеша
             return path.Substring(lastindex + 1);
         }
+
+        public static string GetFilePath(string path)
+        {
+            //Если нет пути, то возвращаем пустую строку
+            if (string.IsNullOrEmpty(path))
+                return string.Empty;
+
+            //Поиск последнего слеша в пути
+            var lastindex = path.LastIndexOf('\\');
+
+            string result = path.Substring(0, lastindex);
+
+            result += "\\";
+
+            return result;
+        }
+
+        public static string GetExpansion(string path)
+        {
+            //Если нет пути, то возвращаем пустую строку
+            if (string.IsNullOrEmpty(path))
+                return string.Empty;
+
+            //Поиск последнего слеша в пути
+            var lastindex = path.LastIndexOf('.');
+
+            if (lastindex < 1) { return ""; }
+
+            string result = path.Substring(lastindex);
+
+            return result;
+        }
         #endregion
 
 
@@ -615,7 +648,8 @@ namespace Advanced_File_Manager
                     //Вызов
                     cm.IsOpen = true;
                 }
-            }else { Functional(sender, e); }
+            }
+            else { Functional(sender, e); }
         }
 
         /// <summary>
@@ -789,19 +823,23 @@ namespace Advanced_File_Manager
         /// <param name="e"></param>
         private void RenameFile(object sender, RoutedEventArgs e)
         {
+            string name = Microsoft.VisualBasic.Interaction.InputBox("Введите новое название файла:");
+            if (name != null && name != "") { data.addCreateFileName(name); }
+            string path = data.getFilePath();
+            string newpath = GetFilePath(path) + data.getCreateFileName();
+            if (data.getFileType() == "directory")
+            {
+                System.IO.Directory.Move(path, newpath);
+            }
+            else if (data.getFileType() == "file")
+            {
+                string expansion = GetExpansion(path);
+                if (expansion != "")
+                    newpath += expansion;
+                System.IO.File.Move(path, newpath);
+            }
             data.isUpdate = true;
         }
-
-        /// <summary>
-        /// Переименование директории
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void RenameDir(object sender, RoutedEventArgs e)
-        {
-            data.isUpdate = true;
-        }
-
         #endregion
 
 
@@ -875,8 +913,10 @@ namespace Advanced_File_Manager
                 try
                 {
                     dirInfo.CreateSubdirectory(subpath);
-                }catch { }
+                }
+                catch { }
                 data.isUpdate = true;
+                data.addCreateFileName("");
             }
         }
 
@@ -909,10 +949,8 @@ namespace Advanced_File_Manager
 
                 //Переименовать файл
                 case Key.F6:
-                    if (data.getFileType() == "file")
+                    if (data.getFileType() == "file" || data.getFileType() == "directory")
                         RenameFile(null, null);
-                    if (data.getFileType() == "directory")
-                        RenameDir(null, null);
                     break;
 
                 //Создать каталог
