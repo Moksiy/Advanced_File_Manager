@@ -872,7 +872,10 @@ namespace Advanced_File_Manager
                     dirInfo.Create();
                     data.isUpdate = true;
                 }
-                dirInfo.CreateSubdirectory(subpath);
+                try
+                {
+                    dirInfo.CreateSubdirectory(subpath);
+                }catch { }
                 data.isUpdate = true;
             }
         }
