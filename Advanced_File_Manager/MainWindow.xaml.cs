@@ -829,14 +829,22 @@ namespace Advanced_File_Manager
             string newpath = GetFilePath(path) + data.getCreateFileName();
             if (data.getFileType() == "directory")
             {
-                System.IO.Directory.Move(path, newpath);
+                try
+                {
+                    System.IO.Directory.Move(path, newpath);
+                }
+                catch { MessageBox.Show("Ошибка переименования каталога"); }
             }
             else if (data.getFileType() == "file")
             {
-                string expansion = GetExpansion(path);
-                if (expansion != "")
-                    newpath += expansion;
-                System.IO.File.Move(path, newpath);
+                try
+                {
+                    string expansion = GetExpansion(path);
+                    if (expansion != "")
+                        newpath += expansion;
+                    System.IO.File.Move(path, newpath);
+                }
+                catch { MessageBox.Show("Ошибка переименования файла"); }
             }
             data.isUpdate = true;
         }
@@ -914,7 +922,7 @@ namespace Advanced_File_Manager
                 {
                     dirInfo.CreateSubdirectory(subpath);
                 }
-                catch { }
+                catch { MessageBox.Show("Ошибка создания каталога"); }
                 data.isUpdate = true;
                 data.addCreateFileName("");
             }

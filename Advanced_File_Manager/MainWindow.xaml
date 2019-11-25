@@ -15,7 +15,7 @@
                     <MenuItem Header="Открыть" Click="OpenFile"/>
                     <MenuItem Header="Копировать" Click="CopyFile"/>
                     <MenuItem Header="Вырезать" Click="CutFile_"/>
-                    <MenuItem Header="Переменовать" Click="RenameFile"/>
+                    <MenuItem Header="Переименовать" Click="RenameFile"/>
                     <MenuItem Header="Удалить" Click="RemoveFile"/>
                 </ContextMenu>
                 <ContextMenu x:Key ="FileCoppied">
@@ -23,21 +23,21 @@
                     <MenuItem Header="Открыть" Click="OpenFile"/>
                     <MenuItem Header="Копировать" Click="CopyFile"/>
                     <MenuItem Header="Вырезать" Click="CutFile_"/>
-                    <MenuItem Header="Переменовать" Click="RenameFile"/>
+                    <MenuItem Header="Переименовать" Click="RenameFile"/>
                     <MenuItem Header="Удалить" Click="RemoveFile"/>
                 </ContextMenu>
                 <ContextMenu x:Key="folderCopied">
                     <MenuItem Header="Вставить" Click="PasteFile"/>
                     <MenuItem Header="Копировать" Click="CopyFile"/>
                     <MenuItem Header="Вырезать" Click="CutFile_"/>
-                    <MenuItem Header="Переменовать" Click="RenameFile"/>
+                    <MenuItem Header="Переименовать" Click="RenameFile"/>
                     <MenuItem Header="Удалить" Click="RemoveFile"/>
                     <MenuItem Header="Создать" Click="CreateDir"/>
                 </ContextMenu>
                 <ContextMenu x:Key="folder">
                     <MenuItem Header="Копировать" Click="CopyFile"/>
                     <MenuItem Header="Вырезать" Click="CutFile_"/>
-                    <MenuItem Header="Переменовать" Click="RenameFile"/>
+                    <MenuItem Header="Переименовать" Click="RenameFile"/>
                     <MenuItem Header="Удалить" Click="RemoveFile"/>
                     <MenuItem Header="Создать" Click="CreateDir"/>
                 </ContextMenu>
